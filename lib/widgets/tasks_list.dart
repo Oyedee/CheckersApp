@@ -3,32 +3,29 @@ import 'package:checkers/widgets/tasks_tile.dart';
 import 'package:checkers/models/task.dart';
 
 class TaskList extends StatefulWidget {
-  const TaskList({Key? key}) : super(key: key);
+  final List<Task> tasks;
+
+  TaskList({required this.tasks});
 
   @override
   State<TaskList> createState() => _TaskListState();
 }
 
 class _TaskListState extends State<TaskList> {
-  List<Task> tasks = [
-    Task(name: 'Buy Ethereum'),
-    Task(name: 'Sell Bitcoin'),
-    Task(name: 'Buy Buy Gold'),
-  ];
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
       itemBuilder: (context, index) {
         return TaskTile(
-            isChecked: tasks[index].isDone,
-            taskTitle: tasks[index].name,
+            isChecked: widget.tasks[index].isDone,
+            taskTitle: widget.tasks[index].name,
             checkboxCallback: (bool? checkboxState) {
               setState(() {
-                tasks[index].toggleDone();
+                widget.tasks[index].toggleDone();
               });
             });
       },
-      itemCount: tasks.length,
+      itemCount: widget.tasks.length,
     );
   }
 }

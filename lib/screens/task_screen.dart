@@ -1,11 +1,24 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:checkers/widgets/tasks_list.dart';
 import 'package:checkers/screens/add_task_screen.dart';
+import 'package:checkers/models/task.dart';
 
-class TaskScreen extends StatelessWidget {
+class TaskScreen extends StatefulWidget {
   const TaskScreen({Key? key}) : super(key: key);
+
+  @override
+  State<TaskScreen> createState() => _TaskScreenState();
+}
+
+class _TaskScreenState extends State<TaskScreen> {
+  List<Task> tasks = [
+    Task(name: 'Buy Ethereum'),
+    Task(name: 'Sell Bitcoin'),
+    Task(name: 'Buy Buy Gold'),
+  ];
+  String taskInput = 'Buy Litecoin';
+  bool isDismissible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -19,8 +32,8 @@ class TaskScreen extends StatelessWidget {
                 const EdgeInsets.only(top: 60, left: 30, right: 30, bottom: 30),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                CircleAvatar(
+              children: [
+                const CircleAvatar(
                   backgroundColor: Colors.white,
                   radius: 30,
                   child: Icon(
@@ -29,10 +42,10 @@ class TaskScreen extends StatelessWidget {
                     size: 40,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
-                Text(
+                const Text(
                   'Checkers',
                   style: TextStyle(
                       fontFamily: 'Ubuntu',
@@ -41,8 +54,8 @@ class TaskScreen extends StatelessWidget {
                       fontWeight: FontWeight.w700),
                 ),
                 Text(
-                  '12 Tasks',
-                  style: TextStyle(
+                  '${tasks.length} Checks',
+                  style: const TextStyle(
                       color: Colors.white, fontFamily: 'Ubuntu', fontSize: 18),
                 ),
               ],
@@ -57,7 +70,7 @@ class TaskScreen extends StatelessWidget {
                     topLeft: Radius.circular(20),
                     topRight: Radius.circular(20),
                   )),
-              child: TaskList(),
+              child: TaskList(tasks: tasks),
             ),
           ),
         ],
@@ -67,7 +80,20 @@ class TaskScreen extends StatelessWidget {
         onPressed: () {
           showModalBottomSheet(
             context: context,
-            builder: (context) => const AddTaskScreen(),
+            builder: (context) => AddTaskScreen(
+              onChanged: (newValue) {
+                setState(() {
+                  taskInput = newValue!;
+                });
+              },
+              onPressed: () {
+                setState(() {
+                  var newTask = Task(name: taskInput);
+                  tasks.add(newTask);
+                });
+                Navigator.pop(context);
+              },
+            ),
           );
         },
         child: const Icon(Icons.add),
