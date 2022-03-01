@@ -1,7 +1,11 @@
+import 'package:checkers/models/task.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:checkers/screens/task_screen.dart';
 import 'package:device_preview/device_preview.dart';
+import 'package:provider/provider.dart';
+import 'package:checkers/models/task.dart';
+import 'package:checkers/models/task_data.dart';
 
 void main() {
   runApp(
@@ -18,14 +22,19 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      useInheritedMediaQuery: true,
-      locale: DevicePreview.locale(context),
-      builder: DevicePreview.appBuilder,
-      theme: ThemeData(
-        primarySwatch: Colors.deepOrange,
+    return ChangeNotifierProvider<TaskData>(
+      create: (BuildContext context) {
+        return TaskData();
+      },
+      child: MaterialApp(
+        useInheritedMediaQuery: true,
+        locale: DevicePreview.locale(context),
+        builder: DevicePreview.appBuilder,
+        theme: ThemeData(
+          primarySwatch: Colors.deepOrange,
+        ),
+        home: const TaskScreen(),
       ),
-      home: const TaskScreen(),
     );
   }
 }

@@ -1,24 +1,12 @@
+import 'package:checkers/models/task_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:checkers/widgets/tasks_list.dart';
 import 'package:checkers/screens/add_task_screen.dart';
-import 'package:checkers/models/task.dart';
+import 'package:provider/provider.dart';
 
-class TaskScreen extends StatefulWidget {
+class TaskScreen extends StatelessWidget {
   const TaskScreen({Key? key}) : super(key: key);
-
-  @override
-  State<TaskScreen> createState() => _TaskScreenState();
-}
-
-class _TaskScreenState extends State<TaskScreen> {
-  List<Task> tasks = [
-    Task(name: 'Buy Ethereum'),
-    Task(name: 'Sell Bitcoin'),
-    Task(name: 'Buy Buy Gold'),
-  ];
-  String taskInput = 'Buy Litecoin';
-  bool isDismissible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +42,7 @@ class _TaskScreenState extends State<TaskScreen> {
                       fontWeight: FontWeight.w700),
                 ),
                 Text(
-                  '${tasks.length} Checks',
+                  '${Provider.of<TaskData>(context).taskCount} Checks',
                   style: const TextStyle(
                       color: Colors.white, fontFamily: 'Ubuntu', fontSize: 18),
                 ),
@@ -70,7 +58,7 @@ class _TaskScreenState extends State<TaskScreen> {
                     topLeft: Radius.circular(20),
                     topRight: Radius.circular(20),
                   )),
-              child: TaskList(tasks: tasks),
+              child: TaskList(),
             ),
           ),
         ],
@@ -82,15 +70,15 @@ class _TaskScreenState extends State<TaskScreen> {
             context: context,
             builder: (context) => AddTaskScreen(
               onChanged: (newValue) {
-                setState(() {
+                /*setState(() {
                   taskInput = newValue!;
-                });
+                });*/
               },
               onPressed: () {
-                setState(() {
+                /*setState(() {
                   var newTask = Task(name: taskInput);
                   tasks.add(newTask);
-                });
+                });*/
                 Navigator.pop(context);
               },
             ),
