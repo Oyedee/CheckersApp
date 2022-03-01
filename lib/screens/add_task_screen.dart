@@ -1,13 +1,12 @@
+import 'package:checkers/models/task.dart';
 import 'package:flutter/material.dart';
+import 'package:checkers/models/task_data.dart';
+import 'package:provider/provider.dart';
 
 class AddTaskScreen extends StatelessWidget {
-  final void Function() onPressed;
-  final void Function(String?) onChanged;
-
-  AddTaskScreen({required this.onPressed, required this.onChanged});
-
   @override
   Widget build(BuildContext context) {
+    String newTaskTitle = 'Buy Eth';
     return Container(
       color: const Color(0xff757575),
       child: Container(
@@ -36,7 +35,9 @@ class AddTaskScreen extends StatelessWidget {
                 autofocus: true,
                 textAlign: TextAlign.center,
                 textCapitalization: TextCapitalization.sentences,
-                onChanged: onChanged,
+                onChanged: (newValue) {
+                  newTaskTitle = newValue;
+                },
                 decoration: const InputDecoration(
                   border: UnderlineInputBorder(
                       borderSide: BorderSide(color: Colors.deepOrangeAccent)),
@@ -48,7 +49,11 @@ class AddTaskScreen extends StatelessWidget {
               ElevatedButton(
                 style: TextButton.styleFrom(
                     backgroundColor: Colors.deepOrangeAccent),
-                onPressed: onPressed,
+                onPressed: () {
+                  Provider.of<TaskData>(context, listen: false)
+                      .addTask(newTaskTitle);
+                  Navigator.pop(context);
+                },
                 child: const Text(
                   'Add',
                   style: TextStyle(
