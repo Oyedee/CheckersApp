@@ -19,49 +19,52 @@ class AddTaskScreen extends StatelessWidget {
         ),
         child: Padding(
           padding: const EdgeInsets.all(50.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const Text(
-                'Add Check',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    color: Colors.deepOrangeAccent,
-                    fontFamily: 'Ubuntu',
-                    fontSize: 20,
-                    fontWeight: FontWeight.w900),
-              ),
-              TextField(
-                autofocus: true,
-                textAlign: TextAlign.center,
-                textCapitalization: TextCapitalization.sentences,
-                onChanged: (newValue) {
-                  newTaskTitle = newValue;
-                },
-                decoration: const InputDecoration(
-                  border: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.deepOrangeAccent)),
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              ElevatedButton(
-                style: TextButton.styleFrom(
-                    backgroundColor: Colors.deepOrangeAccent),
-                onPressed: () {
-                  Provider.of<TaskData>(context, listen: false)
-                      .addTask(newTaskTitle);
-                  Navigator.pop(context);
-                },
-                child: const Text(
-                  'Add',
+          child: Flexible(
+            fit: FlexFit.loose,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const Text(
+                  'Add Check',
+                  textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: Colors.white,
+                      color: Colors.deepOrangeAccent,
+                      fontFamily: 'Ubuntu',
+                      fontSize: 20,
+                      fontWeight: FontWeight.w900),
+                ),
+                TextField(
+                  autofocus: true,
+                  textAlign: TextAlign.center,
+                  textCapitalization: TextCapitalization.sentences,
+                  onChanged: (newValue) {
+                    newTaskTitle = newValue;
+                  },
+                  decoration: const InputDecoration(
+                    border: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.deepOrangeAccent)),
                   ),
                 ),
-              ),
-            ],
+                const SizedBox(
+                  height: 20,
+                ),
+                ElevatedButton(
+                  style: TextButton.styleFrom(
+                      backgroundColor: Colors.deepOrangeAccent),
+                  onPressed: () {
+                    Provider.of<TaskData>(context, listen: false)
+                        .addTask(newTaskTitle);
+                    Navigator.pop(context);
+                  },
+                  child: const Text(
+                    'Add',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
