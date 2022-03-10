@@ -3,11 +3,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:checkers/screens/task_screen.dart';
 import 'package:device_preview/device_preview.dart';
-import 'package:provider/provider.dart';
-import 'package:checkers/models/task.dart';
-import 'package:checkers/models/task_data.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+  Hive.registerAdapter(TaskAdapter());
+
   runApp(
     DevicePreview(
       enabled: !kReleaseMode,
@@ -16,25 +19,44 @@ void main() {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
   @override
+  void dispose() {
+    Hive.box('tasks').compact();
+    Hive.box('tasks').close();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<TaskData>(
-      create: (BuildContext context) {
-        return TaskData();
-      },
-      child: MaterialApp(
-        useInheritedMediaQuery: true,
-        locale: DevicePreview.locale(context),
-        builder: DevicePreview.appBuilder,
-        theme: ThemeData(
-          primarySwatch: Colors.deepOrange,
-        ),
-        home: const TaskScreen(),
+    return MaterialApp(
+      useInheritedMediaQuery: true,
+      locale: DevicePreview.locale(context),
+      builder: DevicePreview.appBuilder,
+      theme: ThemeData(
+        primarySwatch: Colors.deepOrange,
       ),
+      home: FutureBuilder(
+          future: Hive.openBox<Task>('tasks'),
+          builder: (context, AsyncSnapshot snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.hasError) {
+                return Text(snapshot.error.toString());
+              } else {
+                return const TaskScreen();
+              }
+            } else {
+              return const Scaffold();
+            }
+          }),
     );
   }
 }
